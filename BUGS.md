@@ -10,4 +10,4 @@ Each entry lists the symptom, root cause, fix, how it was found, the test added 
 - **Fix:** Stop fighting the browser. Escape now simply closes the dialog (which also lets the player study the revealed boards), and a game-over bar with the result and a Play Again button is shown above the boards for the whole game-over phase.
 - **How found:** Code review of the dialog's Escape handling while preparing milestone 4, confirmed by manual testing with a Playwright script in all three browsers.
 - **Test added:** The end-to-end test now presses Escape three times at game over and then starts a new game with the Play Again button on the page. `App.test.tsx` checks that a Play Again button outside the dialog is available at game over.
-- **Fixed in:** _pending_
+- **Fixed in:** f0e4a86
