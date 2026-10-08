@@ -67,11 +67,10 @@ describe('computer opponent over 100 full games', () => {
   })
 })
 
-function aiAfter(shots: [Coord, 'miss' | 'hit' | 'sunk', ('Destroyer' | 'Cruiser' | 'Submarine')?][]): AiState {
-  return shots.reduce(
-    (ai, [coord, result, ship]) => recordResult(ai, coord, result, ship),
-    createAiState(),
-  )
+function aiAfter(
+  shots: [Coord, 'miss' | 'hit' | 'sunk', ('Destroyer' | 'Cruiser' | 'Submarine')?][],
+): AiState {
+  return shots.reduce((ai, [coord, result, ship]) => recordResult(ai, coord, result, ship), createAiState())
 }
 
 describe('hunt mode', () => {
