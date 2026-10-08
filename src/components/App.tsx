@@ -10,6 +10,7 @@ import { randomSeed } from '../utils/seed'
 import Board from './Board'
 import { enemyCells, playerCells, type Preview } from './boardView'
 import FleetStatus from './FleetStatus'
+import GameOverBar from './GameOverBar'
 import GameOverDialog from './GameOverDialog'
 import Header from './Header'
 import MessageLog from './MessageLog'
@@ -89,6 +90,9 @@ export default function App({ seed, fixedSeed = null }: AppProps) {
             onReset={() => dispatch({ type: 'RESET_PLACEMENT' })}
             onStart={() => dispatch({ type: 'START' })}
           />
+        )}
+        {state.phase === 'gameover' && (
+          <GameOverBar won={state.winner === 'player'} onPlayAgain={playAgain} />
         )}
         <div className="boards">
           <div className="board-column">

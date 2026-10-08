@@ -18,13 +18,8 @@ export default function GameOverDialog({ won, shots, hits, onPlayAgain }: GameOv
 
   const accuracy = shots > 0 ? Math.round((hits / shots) * 100) : 0
   return (
-    <dialog
-      ref={ref}
-      className="game-over panel"
-      aria-labelledby="game-over-title"
-      // Keep the dialog open on Escape; Play Again is the way out.
-      onCancel={(e) => e.preventDefault()}
-    >
+    // Escape closes the dialog; Play Again stays available in GameOverBar.
+    <dialog ref={ref} className="game-over panel" aria-labelledby="game-over-title">
       <h2 id="game-over-title" className={won ? 'result-win' : 'result-loss'}>
         {won ? 'Victory' : 'Defeat'}
       </h2>

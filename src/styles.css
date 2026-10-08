@@ -461,6 +461,18 @@ main {
   font-family: var(--font-mono);
 }
 
+.game-over-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.game-over-bar p {
+  margin: 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

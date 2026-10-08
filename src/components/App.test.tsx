@@ -73,4 +73,28 @@ describe('App', () => {
     expect(screen.getByRole('status').textContent).toBe('Your turn')
     expect(document.querySelectorAll('.log-entry')).toHaveLength(2)
   })
+
+  it('still offers Play Again on the page after the game-over dialog is dismissed', () => {
+    // jsdom does not implement modal dialogs.
+    HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) {
+      this.open = true
+    }
+    HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
+      this.open = false
+    }
+    startGame()
+    while (!document.querySelector('dialog')) {
+      fireEvent.click(enemyGrid().getAllByRole('button', { name: /, not fired at$/ })[0])
+      act(() => vi.advanceTimersByTime(COMPUTER_DELAY_MS))
+    }
+    const dialog = document.querySelector('dialog')!
+    // Browsers close the dialog on repeated Escape presses even if `cancel` is prevented.
+    act(() => dialog.close())
+    const outside = screen
+      .getAllByRole('button', { name: 'Play Again', hidden: true })
+      .filter((b) => !dialog.contains(b))
+    expect(outside).toHaveLength(1)
+    fireEvent.click(outside[0])
+    expect(screen.getByRole('status').textContent).toBe('Placing ships')
+  })
 })
