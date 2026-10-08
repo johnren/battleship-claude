@@ -1,0 +1,397 @@
+:root {
+  --bg: #0b1726;
+  --panel: #12243a;
+  --water: #1c3a5e;
+  --grid-line: #2e5480;
+  --text: #e6eef7;
+  --text-muted: #8fa7c0;
+  --ship: #7a8b99;
+  --hit: #e5484d;
+  --sunk: #7a1f24;
+  --miss: #cfe3f5;
+  --valid: #3dd68c;
+  --accent: #f2b33d;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---------- Layout ---------- */
+
+.app {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.boards {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.board-column {
+  flex: 0 1 400px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .boards {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .board-column {
+    flex: none;
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+/* ---------- Turn indicator ---------- */
+
+.turn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.turn-player {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.turn-muted {
+  color: var(--text-muted);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--text-muted);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ---------- Placement ---------- */
+
+.hint {
+  margin: 0 0 12px;
+  color: var(--text-muted);
+}
+
+.ship-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ship-option {
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 6px 12px;
+  border: 1px solid var(--grid-line);
+  border-radius: 6px;
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.ship-option[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.ship-option-name {
+  font-weight: 600;
+}
+
+.ship-option-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pips {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.pip {
+  width: 8px;
+  height: 8px;
+  background: var(--ship);
+  border-radius: 1px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Board ---------- */
+
+.board {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 20px repeat(10, minmax(0, 1fr));
+  gap: 2px;
+  width: 100%;
+  touch-action: manipulation;
+}
+
+.grid-label,
+.grid-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1;
+  min-height: 20px;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--grid-line);
+  border-radius: 2px;
+  background: var(--water);
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cell-ship {
+  background: var(--ship);
+}
+
+/* Miss: small centered dot. */
+.cell-miss::after {
+  content: '';
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: var(--miss);
+}
+
+/* Hit: bold ✕. Sunk: dark red fill, ✕ kept. */
+.cell-hit::after,
+.cell-sunk::after {
+  content: '✕';
+  font-weight: 900;
+  font-size: clamp(14px, 4.5vw, 22px);
+  line-height: 1;
+  color: var(--hit);
+}
+
+.cell-sunk {
+  background: var(--sunk);
+  border-color: var(--hit);
+}
+
+.cell-sunk::after {
+  /* --hit on --sunk is too low-contrast, so the kept ✕ uses the main text color. */
+  color: var(--text);
+}
+
+/* Placement preview: colored overlay at 50% across every covered cell. */
+.preview-valid::before,
+.preview-invalid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
+
+.preview-valid::before {
+  background: var(--valid);
+}
+
+.preview-invalid::before {
+  background: var(--hit);
+}
+
+.board-placing .cell-interactive {
+  cursor: pointer;
+}
+
+.board-enemy .cell-interactive {
+  cursor: crosshair;
+}
+
+.board-enemy .cell-interactive:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .cell-miss::after,
+  .cell-hit::after {
+    animation: marker-in 150ms ease-out;
+  }
+
+  .cell-sunk {
+    animation: sunk-flash 450ms ease-out 1;
+  }
+
+  .pulse-dot {
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes marker-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes sunk-flash {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  40% {
+    filter: brightness(2.2);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}

@@ -77,7 +77,13 @@ function nextUnplaced(board: Board, after: ShipType | null): ShipType | null {
   return (unplaced.find((s) => FLEET.indexOf(s) > startIndex) ?? unplaced[0]).type
 }
 
-function logEntry(state: GameState, shooter: Side, coord: Coord, result: ShotResult, shipType?: ShipType): LogEntry {
+function logEntry(
+  state: GameState,
+  shooter: Side,
+  coord: Coord,
+  result: ShotResult,
+  shipType?: ShipType,
+): LogEntry {
   return { id: (state.log[0]?.id ?? 0) + 1, shooter, coord, result, shipType }
 }
 

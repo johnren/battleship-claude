@@ -188,7 +188,11 @@ describe('game over', () => {
 describe('Play Again', () => {
   it('fully resets state', () => {
     let s = started(77)
-    s = run(s, { type: 'PLAYER_FIRE', coord: { row: 3, col: 3 } }, { type: 'COMPUTER_FIRE', gameId: s.gameId })
+    s = run(
+      s,
+      { type: 'PLAYER_FIRE', coord: { row: 3, col: 3 } },
+      { type: 'COMPUTER_FIRE', gameId: s.gameId },
+    )
     const again = run(s, { type: 'PLAY_AGAIN', seed: 77 })
     expect(again).toEqual(createInitialState(77, s.gameId + 1))
     expect(again.phase).toBe('placement')
