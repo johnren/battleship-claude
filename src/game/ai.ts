@@ -45,9 +45,7 @@ function uniqueCoords(coords: Coord[]): Coord[] {
 function untriedNeighbors(ai: AiState, cells: Coord[]): Coord[] {
   return uniqueCoords(
     cells.flatMap((c) =>
-      DIRECTIONS.map((d) => ({ row: c.row + d.row, col: c.col + d.col })).filter((n) =>
-        isUntried(ai, n),
-      ),
+      DIRECTIONS.map((d) => ({ row: c.row + d.row, col: c.col + d.col })).filter((n) => isUntried(ai, n)),
     ),
   )
 }
@@ -133,12 +131,7 @@ function allHits(ai: AiState): Coord[] {
  * through the sinking shot that matches the ship's length is attributed to
  * that ship and stops being targeted.
  */
-export function recordResult(
-  ai: AiState,
-  coord: Coord,
-  result: ShotResult,
-  sunkShip?: ShipType,
-): AiState {
+export function recordResult(ai: AiState, coord: Coord, result: ShotResult, sunkShip?: ShipType): AiState {
   const shots = ai.shots.map((row, r) =>
     r === coord.row ? row.map((m, c) => (c === coord.col ? (result === 'miss' ? 'miss' : 'hit') : m)) : row,
   )
